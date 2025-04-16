@@ -1,7 +1,7 @@
 
-// ------- Initialization: basically scaling to preserve quality -------
-const CANVAS_WIDTH = 512;
-const CANVAS_HEIGHT = 512;
+// Initialization: basically scaling to preserve quality
+let CANVAS_WIDTH = 512;
+let CANVAS_HEIGHT = 512;
 
 const canvas = document.getElementById('gameCanvas');
 
@@ -16,7 +16,7 @@ const ctx = canvas.getContext('2d');
 ctx.scale(dpr, dpr); // This is important to ensure everything draws correctly at scale of different displays
 
 // Canvas grid - divides the canvas into a 25 x 25 grid
-const cellSize = 16; // Cell size in pixels
+const cellSize = 20; // Cell size in pixels
 const rows = Math.floor(CANVAS_HEIGHT / cellSize);
 const columns = Math.floor(CANVAS_WIDTH / cellSize);
 
@@ -78,13 +78,13 @@ buttons.forEach(button => {
   
       switch(level) {
         case 'easy':
-          difficulty = 25;
+          difficulty = 10;
           break;
         case 'hard':
-          difficulty = 40;
+          difficulty = 15;
           break;
         case 'insane':
-          difficulty = 60;
+          difficulty = 35;
           break;
       }
   
@@ -172,7 +172,7 @@ function moveSnake() {
 
   // Self-collision detection (moved inside moveSnake)
   if (snake.some((segment, index) => index !== 0 && segment.x === head.x && segment.y === head.y)) {
-    alert("Game Over! You ate yourself, you fucking cannibal! 🐍");
+    alert("Game Over! You bit yourself, you fucking cannibal!");
     resetGame();
     return; // Exit moveSnake so further processing doesn't occur
   }
@@ -219,3 +219,93 @@ window.addEventListener('keydown', function(e) {
     }
   }
 });
+
+
+// FOR SMALLER DEVICES
+// MEDIA QUERIES
+
+const mediaQuery = window.matchMedia('(max-width: 768px)');
+
+if (mediaQuery.matches) {
+  console.log("Small screen detected");
+} else {
+  console.log("Big screen detected");
+}
+
+// TOUCH EVENT LISTENERS
+
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+window.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+}, {passive : true});
+
+window.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipeDirection();
+}, {passive : true});
+
+function handleSwipeDirection() {
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+
+    //swipe sensitivity
+    const minSwipeDistance = 30; //as in 30 pixels
+
+    //absolute values
+    const absX = Math.abs(diffX);
+    const absY = Math.abs(diffY);
+
+    //to check if swipe was long enough
+    if(Math.max(absX, absY) < minSwipeDistance){
+        console.log("swipe harder lil bro");
+        return;
+    }
+
+
+    // Compare horizontal vs vertical swipe
+    if (absX > absY) {
+        // Horizontal Swipe
+        if (diffX > 0) { // Swipe Right
+            // Check if currently moving vertically (direction.x is 0)
+            if (direction.x === 0) {
+                direction = { x: 1, y: 0 };
+                console.log("Swiped Right");
+            }
+        } else { // Swipe Left
+            // Check if currently moving vertically (direction.x is 0)
+            if (direction.x === 0) {
+                direction = { x: -1, y: 0 };
+                console.log("Swiped Left");
+            }
+        }
+    } else {
+        // Vertical Swipe
+        if (diffY > 0) { // Swipe Down
+            // Check if currently moving horizontally (direction.y is 0)
+            if (direction.y === 0) {
+                direction = { x: 0, y: 1 };
+                console.log("Swiped Down");
+            }
+        } else { // Swipe Up
+             // Check if currently moving horizontally (direction.y is 0)
+            if (direction.y === 0) {
+                direction = { x: 0, y: -1 };
+                console.log("Swiped Up");
+            }
+        }
+    }
+
+    // Reset coordinates for next swipe
+    touchStartX = 0;
+    touchStartY = 0;
+    touchEndX = 0;
+    touchEndY = 0;
+}
