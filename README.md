@@ -1,6 +1,6 @@
-# 🐍 Snake Game – HTML Canvas Edition
+# 🐍 Snake Game
 
-Relive the pixel-chomping glory days with this modern take on the classic Snake Game — powered by vanilla JavaScript and rendered on the almighty HTML5 Canvas.
+Relive the pixel-chomping glory days with this modern take on the classic Snake Game — powered by vanilla JavaScript and rendered on an HTML5 Canvas.
 
 ---
 
