@@ -84,8 +84,7 @@ cd snake-game
 If you're feeling extra, send a pull request 😉
 
 👤 Author
-Olatubosun
-Frontend Developer + Med School Warrior 💉👨🏽‍💻
+'Tubosun
 
 📜 License
 MIT License — do whatever you want, but give credit where it's due.
